@@ -19,7 +19,7 @@
       <el-row>
         <el-col>
           <el-row>
-            <p>Querys</p>
+            <p>Querys &nbsp;<i class="ri-add-line pointer"/></p>
           </el-row>
           <el-row
             v-for="(query, index) in props.options.querys"
@@ -49,7 +49,7 @@
       <el-row>
         <el-col>
           <el-row>
-            <p>Headers</p>
+            <p>Headers &nbsp;<i class="ri-add-line pointer"/></p>
           </el-row>
           <el-row
             v-for="(header, index) in props.options.headers"

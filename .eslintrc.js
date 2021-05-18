@@ -12,6 +12,8 @@ module.exports = {
     ecmaVersion: 2020
   },
   rules: {
-    'space-before-function-paren': 0
+    'space-before-function-paren': 0,
+    'vue/no-mutating-props': 0,
+    'no-return-assign': 0
   }
 }

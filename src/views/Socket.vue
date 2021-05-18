@@ -20,8 +20,14 @@
     </el-header>
     <el-main>
       <el-tabs v-model="tabActive" type="normal" tab-position="top">
-        <el-tab-pane label="options" name="options">
-          <SocketOptions v-model:options="socketSettings.options" />
+        <el-tab-pane label="Options" name="options">
+          <socket-options v-model:options="socketSettings.options" />
+        </el-tab-pane>
+        <el-tab-pane label="Events" name="events">
+          <socket-events v-model:events="socketSettings.events" />
+        </el-tab-pane>
+        <el-tab-pane label="Emits" name="emits">
+          <socket-emits v-model:emits="socketSettings.emits" />
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -30,26 +36,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import SocketOptions from '@/components/Sockets/Options.vue'
-
-interface ValueKey {
-  key: string | null
-  value: string | null
-  active: boolean | null
-}
-
-interface SocketSettings {
-  url: string | null
-  options: {
-    path?: Omit<ValueKey, 'key'>
-    querys?: ValueKey[]
-    headers?: ValueKey[]
-  }
-}
+import SocketEvents from '@/components/Sockets/Events.vue'
+import SocketEmits from '@/components/Sockets/Emits.vue'
+import { SocketSettings } from '@/../types/index'
 
 export default defineComponent({
   name: 'Socket',
   components: {
-    SocketOptions
+    SocketOptions,
+    SocketEvents,
+    SocketEmits
   },
   setup() {
     // Data
@@ -74,9 +70,22 @@ export default defineComponent({
             active: false
           }
         ]
-      }
+      },
+      events: [
+        {
+          value: null,
+          active: false
+        }
+      ],
+      emits: [
+        {
+          key: null,
+          value: '{}',
+          valueType: 'json'
+        }
+      ]
     })
-    const tabActive = ref('options')
+    const tabActive = ref('emits')
 
     // Methods
     const toggleConnection = () => console.log(socketSettings.value)
