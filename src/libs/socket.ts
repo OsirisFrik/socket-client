@@ -1,6 +1,7 @@
 import { SocketOptions, ValueKey } from '@/../types/index'
 import { io, Socket } from 'socket.io-client'
-import { ElNotification } from 'element-plus'
+import { EventEmitter } from 'events'
+import { notify } from './notify'
 
 function parseArray(val: ValueKey[]): { [key: string]: string } {
   const result: { [key: string]: string } = {}
@@ -14,23 +15,49 @@ function parseArray(val: ValueKey[]): { [key: string]: string } {
   return result
 }
 
-class SocketClient {
+class SocketClient extends EventEmitter {
   io: Socket
 
   constructor(server: string, options: SocketOptions) {
+    super()
+
     this.io = io(server, {
       auth: options.auth ? options.headers?.find((item) => item.auth) : undefined,
       query: parseArray(options.querys || []),
       extraHeaders: parseArray(options.headers || []),
       path: options.path?.active ? options.path.value : '/socket.io',
-      transports: ['websocket']
+      transports: ['websocket'],
+      autoConnect: false
     })
 
-    this.io.on('connect', () => ElNotification({
-      type: 'success',
-      title: 'Connected',
-      message: 'Socket connected'
-    }))
+    this.io.on('connect', () => {
+      notify({
+        title: 'Connected',
+        message: 'success connect',
+        type: 'success'
+      })
+
+      this.emit('connected', true)
+    })
+
+    this.io.on('disconnect', () => this.emit('connected', false))
+  }
+
+  connect(): void {
+    this.io.connect()
+  }
+
+  disconnect(): void {
+    this.io.disconnect()
+  }
+
+  send(event: string, value: any) {
+    console.log(event, value)
+    this.io.emit(event, value)
+  }
+
+  get connected(): boolean {
+    return this.io.connected
   }
 }
 

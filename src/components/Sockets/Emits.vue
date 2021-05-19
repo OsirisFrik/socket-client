@@ -7,7 +7,8 @@
       <el-row
         v-for="(emit, index) in props.emits"
         :key="index"
-        :gutter="4">
+        :gutter="4"
+        class="m-b-5">
         <el-col :span="10">
           <el-input
             v-model="emit.key"
@@ -27,12 +28,17 @@
           </el-select>
         </el-col>
         <el-col :span="2">
-          <button class="btn" @click="selectEmit(emit)">
+          <button
+            class="btn"
+            @click="selectEmit(emit)">
             <i class="ri-edit-line"></i>
           </button>
         </el-col>
         <el-col :span="2">
-          <button class="btn">
+          <button
+            :disabled="emit.key.length < 1 || !props.connected"
+            class="btn"
+            @click="send(emit)">
             <i class="ri-send-plane-2-line" />
           </button>
         </el-col>
@@ -49,7 +55,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import MonacoEditor from '@/components/Monaco.vue'
-import { SocketEmit } from 'types'
+import { SocketEmit, ValueType } from 'types'
 
 export default defineComponent({
   name: 'SocketEmits',
@@ -60,9 +66,14 @@ export default defineComponent({
     emits: {
       type: Array,
       required: true
+    },
+    connected: {
+      type: Boolean,
+      default: false
     }
   },
-  setup(props) {
+  emits: ['send'],
+  setup(props, { emit }) {
     const langOptions = ref([
       {
         label: 'Text',
@@ -97,6 +108,15 @@ export default defineComponent({
       })
     }
 
+    const send = (val: ValueType) => {
+      let message: string | number = val.value || ''
+
+      if (val.valueType === 'json') message = JSON.parse(message)
+      else if (val.valueType === 'number') message = parseInt(message)
+
+      emit('send', val.key, message)
+    }
+
     const selectEmit = (val: SocketEmit) => editEmit.value = val
 
     return {
@@ -106,7 +126,8 @@ export default defineComponent({
       editEmit,
       // Methods
       addEmit,
-      selectEmit
+      selectEmit,
+      send
     }
   }
 })

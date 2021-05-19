@@ -1,5 +1,5 @@
 <template>
-  <div class="editor" ref="editorEl" />
+  <div ref="editorEl" id="editor" class="editor" />
 </template>
 <script lang="ts">
 import { nextTick } from 'process'
@@ -12,7 +12,8 @@ window.$monaco = monaco
 declare global {
   interface Window {
     $editor: monaco.editor.IStandaloneCodeEditor,
-    $monaco: any
+    $monaco: any,
+    $el: any
   }
 }
 
@@ -28,34 +29,44 @@ export default defineComponent({
       default: ''
     }
   },
-  setup(props) {
-    const editorEl = ref()
-    const editor = ref<monaco.editor.IStandaloneCodeEditor>()
+  setup(props, { emit }) {
+    const editorEl = ref<HTMLElement | null>()
+    let editor: monaco.editor.IStandaloneCodeEditor
+    let currentVal = props.modelValue.toString()
 
     nextTick(() => {
-      editor.value = monaco.editor.create(editorEl.value, {
+      if (!editorEl.value) return
+
+      editor = monaco.editor.create(editorEl.value, {
         value: props.modelValue,
-        language: props.lang === 'string' ? '' : props.lang,
-        theme: 'vs-dark'
+        language: ['string', 'number'].includes(props.lang) ? '' : props.lang,
+        theme: 'vs-dark',
+        automaticLayout: true
       })
 
-      window.$editor = editor.value
+      editor.onDidChangeModelContent(() => {
+        currentVal = editor.getValue()
+        emit('update:modelValue', currentVal)
+      })
+
+      window.$editor = editor
     })
 
     watch(() => props.lang, (nVal) => {
-      const model = editor.value?.getModel()
+      const model = editor?.getModel()
 
       if (model) monaco.editor.setModelLanguage(model, nVal)
     })
 
     watch(() => props.modelValue, (nVal) => {
-      console.log(monaco.editor.getModels())
-      if (editor.value) monaco.editor.getModels()[0].setValue(nVal)
+      if (editor && nVal !== currentVal) {
+        editor.setValue(nVal)
+        currentVal = nVal
+      }
     })
 
     return {
       props,
-      editor,
       editorEl
     }
   }

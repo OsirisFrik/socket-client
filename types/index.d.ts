@@ -8,7 +8,7 @@ export interface ValueKey {
 export enum ValueTypes {
   STRING = 'string',
   NUMBER = 'number',
-  OBJECT = 'object',
+  OBJECT = 'json',
   JS = 'js'
 }
 

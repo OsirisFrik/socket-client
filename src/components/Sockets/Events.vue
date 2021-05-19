@@ -7,7 +7,8 @@
       <el-row
         v-for="(event, index) in props.events"
         :key="index"
-        :gutter="4">
+        :gutter="12"
+        class="m-b-10">
         <el-col :span=12>
           <el-input
             v-model="event.value"
@@ -18,7 +19,9 @@
             v-model="event.active"
             class="align-switch"
             :active-value="true"
-            :inactive-value="false" />
+            :inactive-value="false"
+            inactive-text="Disabled"
+            active-text="Active" />
         </el-col>
       </el-row>
     </el-col>
@@ -31,6 +34,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'SocketEvents',
   props: {
     events: {
       type: Array,
