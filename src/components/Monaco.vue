@@ -35,7 +35,7 @@ export default defineComponent({
     nextTick(() => {
       editor.value = monaco.editor.create(editorEl.value, {
         value: props.modelValue,
-        language: props.lang,
+        language: props.lang === 'string' ? '' : props.lang,
         theme: 'vs-dark'
       })
 
@@ -49,8 +49,8 @@ export default defineComponent({
     })
 
     watch(() => props.modelValue, (nVal) => {
-      console.log(editor.value, nVal)
-      if (editor.value) editor.value.setValue(nVal || 'test')
+      console.log(monaco.editor.getModels())
+      if (editor.value) monaco.editor.getModels()[0].setValue(nVal)
     })
 
     return {

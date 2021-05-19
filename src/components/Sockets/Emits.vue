@@ -39,7 +39,6 @@
       </el-row>
     </el-col>
     <el-col
-      v-if="editEmit"
       :span="12">
       <monaco-editor
         v-model="editEmit.value"
@@ -83,13 +82,17 @@ export default defineComponent({
       }
     ])
     const langSelect = ref('json')
-    const editEmit = ref<SocketEmit | null>(null)
+    const editEmit = ref<SocketEmit>({
+      value: '',
+      valueType: 'string',
+      key: ''
+    })
 
     // Methods
     const addEmit = () => {
       props.emits.push({
         key: null,
-        value: null,
+        value: 'asdada',
         valueType: 'json'
       })
     }
