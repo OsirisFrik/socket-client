@@ -1,7 +1,8 @@
 export interface ValueKey {
-  key: string | null
-  value: string | null
-  active: boolean | null
+  key: string
+  value?: string
+  active?: boolean
+  auth?: boolean
 }
 
 export enum ValueTypes {
@@ -19,26 +20,16 @@ export interface ValueType extends Omit<ValueKey, 'active'> {
 
 export type SocketEmit = ValueType
 
-export interface SocketSettings {
-  url: string | null
-  options: {
-    path?: Omit<ValueKey, 'key'>
-    querys?: ValueKey[]
-    headers?: ValueKey[]
-  },
-  events: SocketEvent[],
-  emits: ValueType[]
+export interface SocketOptions {
+  path?: Omit<ValueKey, 'key'>
+  querys?: ValueKey[]
+  headers?: ValueKey[]
+  auth?: boolean
 }
 
-namespace SocketSettings {
-  type SocketEmit = ValueType
-  type SocketEvent = ValueKey
-
-  interface Socket {
-    url: string | null
-    options: {
-      path?: Omit<ValueKey, 'key'>
-      querys: ValueKey[]
-    }
-  }
+export interface SocketSettings {
+  url: string
+  options: SocketOptions,
+  events: SocketEvent[],
+  emits: ValueType[]
 }

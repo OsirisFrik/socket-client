@@ -38,6 +38,7 @@ import { defineComponent, ref } from 'vue'
 import SocketOptions from '@/components/Sockets/Options.vue'
 import SocketEvents from '@/components/Sockets/Events.vue'
 import SocketEmits from '@/components/Sockets/Emits.vue'
+import Socket from '@/libs/socket'
 import { SocketSettings } from '@/../types/index'
 
 export default defineComponent({
@@ -50,36 +51,36 @@ export default defineComponent({
   setup() {
     // Data
     const socketSettings = ref<SocketSettings>({
-      url: null,
+      url: 'localhost:3000',
       options: {
         path: {
-          value: null,
+          value: '',
           active: false
         },
         querys: [
           {
-            key: null,
-            value: null,
+            key: '',
+            value: '',
             active: false
           }
         ],
         headers: [
           {
-            key: null,
-            value: null,
+            key: '',
+            value: '',
             active: false
           }
         ]
       },
       events: [
         {
-          value: null,
+          value: '',
           active: false
         }
       ],
       emits: [
         {
-          key: null,
+          key: '',
           value: '{}',
           valueType: 'json'
         }
@@ -88,7 +89,7 @@ export default defineComponent({
     const tabActive = ref('emits')
 
     // Methods
-    const toggleConnection = () => console.log(socketSettings.value)
+    const toggleConnection = () => new Socket(socketSettings.value.url, socketSettings.value.options)
 
     return {
       socketSettings,
