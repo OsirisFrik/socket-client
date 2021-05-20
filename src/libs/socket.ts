@@ -51,7 +51,7 @@ class SocketClient extends EventEmitter {
     this.io.disconnect()
   }
 
-  send(event: string, value: any) {
+  send(event: string, value: any): void {
     console.log(event, value)
     this.io.emit(event, value)
   }

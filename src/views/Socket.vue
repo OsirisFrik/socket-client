@@ -19,7 +19,6 @@
                 </el-button>
                 <el-button
                   v-else
-                  type="danger"
                   size="medium"
                   @click="toggleClient">
                   Disconnect

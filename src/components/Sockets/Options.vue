@@ -14,9 +14,7 @@
                 v-model="props.options.path.active"
                 :active-value="true"
                 :inactive-value="false"
-                class="align-switch"
-                inactive-text="Disabled"
-                active-text="Active" />
+                class="align-switch" />
             </el-col>
           </el-row>
         </el-col>
@@ -47,9 +45,7 @@
                 v-model="query.active"
                 :active-value="true"
                 :inactive-value="false"
-                class="align-switch"
-                inactive-text="Disabled"
-                active-text="Active" />
+                class="align-switch" />
             </el-col>
           </el-row>
         </el-col>
@@ -80,9 +76,7 @@
                 v-model="header.active"
                 :active-value="true"
                 :inactive-value="false"
-                class="align-switch"
-                inactive-text="Disabled"
-                active-text="Active" />
+                class="align-switch" />
             </el-col>
             <el-col :span="6">
               <el-switch
